@@ -3,3 +3,5 @@ uvicorn==0.11.8
 pydantic[email]
 motor==2.2.0
 python-decouple==3.3
+aiokafka==0.7.0
+asyncio==3.4.3
