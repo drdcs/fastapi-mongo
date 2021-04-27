@@ -2,8 +2,9 @@ import motor.motor_asyncio
 from bson.objectid import ObjectId
 from decouple import config
 
+# MONGO_DETAILS = "mongodb://localhost:27017"
+# config will search for .env file and get the MONGO_DETAILS 
 
-# MONGO_DETAILS = "mongodb+srv://admin:admin@cluster1.ugr2l.mongodb.net/students?retryWrites=true&w=majority"
 MONGO_DETAILS = config('MONGO_DETAILS')
 client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.students
