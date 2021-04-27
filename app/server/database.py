@@ -56,7 +56,7 @@ async def update_student(id: str, data: dict):
             {"_id": ObjectId(id)}, {"$set": data}
         )
         if updated_student:
-            return True
+            return await retrive_student(id)
         return False
 
 

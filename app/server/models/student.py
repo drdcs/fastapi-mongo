@@ -48,3 +48,10 @@ def ResponseModel(data, message):
 def ErrorResponseModel(error, code, message):
     return {"error": error, "code": code, "message": message}
 
+"""
+,
+  "course_of_study": "Mechanical Engineeing",
+  "year": 1,
+  "gpa": "4.0"
+
+  """

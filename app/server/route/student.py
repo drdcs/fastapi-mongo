@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
+# from app.server.kafka_io.aio_producer import AIOProducer
+# from app.server.kafka_io import kafka_conn
+from app.server.kafka_io.kafka_conn import aioproducer
+import json
 
 from app.server.database import (
     add_student,
@@ -22,6 +26,7 @@ router = APIRouter()
 async def add_student_data(student: StudentSchema = Body(...)):
     student = jsonable_encoder(student)
     new_student = await add_student(student)
+    await aioproducer.send("pymongo", json.dumps(new_student).encode('ascii'))
     return ResponseModel(new_student, "Student added successfully.")
 
 
@@ -44,6 +49,7 @@ async def get_student_by_id(id):
 @router.delete("/{id}", response_description="Student data deleted from the database")
 async def delete_student_data(id: str):
     deleted_student = await delete_student(id)
+    await aioproducer.send("pymongo", json.dumps(deleted_student).encode('ascii'))
     if deleted_student:
         return ResponseModel(
             "Student with ID: {} removed".format(id), "Student deleted successfully"
@@ -56,6 +62,7 @@ async def delete_student_data(id: str):
 async def update_student_data(id: str, req: UpdateStudentModel= Body(...)):
     req = {k: v for k, v in req.dict().items() if v is not None}
     updated_student = await update_student(id, req)
+    await aioproducer.send("pymongo", json.dumps(updated_student).encode('ascii'))
     if updated_student:
         return ResponseModel("Student with ID: {} removed".format(id),"Student name updated successfully")
     return ErrorResponseModel(
